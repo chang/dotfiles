@@ -1,11 +1,11 @@
 # added by Anaconda3 4.3.1 installer
 export PATH="/Users/eric/anaconda/bin:$PATH"
+export SCALA_HOME="/usr/local/opt/scala/idea"
 
-# echo "hello, Eric"
 
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 export PS1="\w \$ "
 
 alias l='ls'
-alias python='python3'
+alias subl='/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl'
