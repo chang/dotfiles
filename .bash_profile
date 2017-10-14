@@ -9,3 +9,4 @@ export PS1="\w \$ "
 
 alias l='ls'
 alias subl='/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl'
+alias copy="tr -d '\n' | pbcopy"
