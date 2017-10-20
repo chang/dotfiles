@@ -2,6 +2,7 @@
 export PATH="/Users/eric/anaconda/bin:$PATH"
 export SCALA_HOME="/usr/local/opt/scala/idea"
 
+source ~/git-completion.bash
 
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
