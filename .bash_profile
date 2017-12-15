@@ -8,7 +8,19 @@ export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 export PS1="\w \$ "
 
+# misc 
 alias l='ls'
 alias subl='/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl'
 alias copy="tr -d '\n' | pbcopy"
+
+# git aliases
+alias ga='git add'
 alias gs='git status'
+alias gb='git branch'
+alias gch='git checkout'
+
+# requires fzf: https://github.com/junegunn/fzf
+alias fzf='fzf --preview="cat {}" --preview-window=right:50%:wrap'
+
+# requires autojump: https://github.com/wting/autojump
+[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
