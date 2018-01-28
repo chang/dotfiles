@@ -19,6 +19,9 @@ alias gs='git status'
 alias gb='git branch'
 alias gch='git checkout'
 
+# apply colors to git diff
+source .git-diff-colors
+
 # requires git aware prompt
 export GITAWAREPROMPT=~/.bash/git-aware-prompt
 source "${GITAWAREPROMPT}/main.sh"
