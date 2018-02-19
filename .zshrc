@@ -5,23 +5,52 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
+# Set iterm2 title bar, RGB
+echo -e "\033]6;1;bg;red;brightness;40\a"
+echo -e "\033]6;1;bg;green;brightness;42\a"
+echo -e "\033]6;1;bg;blue;brightness;54\a"
+
+# MySQL bullshit aliases
+alias mysql-stop='sudo /usr/local/mysql/support-files/mysql.server stop'
+export PATH="/usr/local/mysql/bin:$PATH"
+
+# Rust
+export PATH="/Users/eric/.cargo/bin:$PATH"
+
+
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
 # Customize to your needs...
-alias l='ls'
+
+# general OS aliases
+alias l='ls -G'
 alias subl='/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl'
 alias copy="tr -d '\n' | pbcopy"
+alias py="python3"
+
+# temporary C++ alias
+function cprun () {
+    g++ -std=c++14 "$@" && ./a.out && rm a.out
+    return 0
+}
+
+function crun () {
+    clang "$@" && ./a.out
+    return 0
+}
+
+alias cling='/Users/eric/cling/cling-build/builddir/bin/cling'
 
 # git aliases
 alias ga='git add'
+alias gc='git commit'
 alias gs='git status'
 alias gb='git branch'
 alias gch='git checkout'
-
-source ~/.git-diff-colors 
+alias git-count='git ls-files | xargs wc -l'
 
 # requires git aware prompt
 export GITAWAREPROMPT=~/.bash/git-aware-prompt
