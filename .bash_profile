@@ -5,8 +5,8 @@ export PYTHONPATH="${PYTHONPATH}:/Users/eric/Documents/subreddit_recommender"
 
 source ~/git-completion.bash
 
-export CLICOLOR=1
-export LSCOLORS=ExFxCxDxBxegedabagacad
+# export CLICOLOR=1
+# export LSCOLORS=ExFxCxDxBxegedabagacad
 export PS1="\w \$ "
 
 alias l='ls'
@@ -18,9 +18,6 @@ alias ga='git add'
 alias gs='git status'
 alias gb='git branch'
 alias gch='git checkout'
-
-# apply colors to git diff
-source .git-diff-colors
 
 # requires git aware prompt
 export GITAWAREPROMPT=~/.bash/git-aware-prompt
@@ -35,6 +32,6 @@ alias fzf='fzf --preview="cat {}" --preview-window=right:50%:wrap | tee >(copy)'
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 
 
-export PATH="$HOME/.cargo/bin:$PATH"
+# export PATH="$HOME/.cargo/bin:$PATH"
 export GOPATH="$HOME/go"
 export PATH="$PATH:$GOPATH/bin"
