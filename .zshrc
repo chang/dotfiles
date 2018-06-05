@@ -3,15 +3,29 @@
 
 # Source Prezto first, so our settings override theirs
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+    source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-# alias tips: https://github.com/djui/alias-tips
-# This might be majorly slowing down my terminal.
-# source alias-tips/alias-tips.plugin.zsh
 
-# Set iterm2 title bar, RGB
-# Current theme: Snazzy
+## zsh hooks
+
+# run these functions after every cd
+chpwd_functions=("activate_virtualenv" "cd_ls")
+
+function activate_virtualenv() {  
+    if [[ -d "env" ]] && [[ -e "env/bin/activate" ]]; then
+        # check if the virtualeenv is already active
+        echo "Activated virtualenv: $(dirs -c; dirs)/env"
+        source env/bin/activate
+    fi
+}
+
+# for some reason this needs to be declared as a function
+function cd_ls() {
+    ls
+}
+
+# Current theme: Snazzy - iTerm2 color escape codes
 echo -e "\033]6;1;bg;red;brightness;40\a"
 echo -e "\033]6;1;bg;green;brightness;42\a"
 echo -e "\033]6;1;bg;blue;brightness;54\a"
@@ -19,7 +33,6 @@ DISABLE_AUTO_TITLE="true"
 
 # Rust
 export PATH="/Users/eric/.cargo/bin:$PATH"
-alias ct="cargo test"
 function clippy {
     pkgname=$(basename $PWD)
     if [ ! -f Cargo.toml ]; then
@@ -29,13 +42,13 @@ function clippy {
     cargo clean -p $pkgname && cargo clippy
 }
 
-
+# Racket
+export PATH="/Applications/Racket v6.12/bin:$PATH"
 
 # kcov (Code coverage for compiled binaries)
 export PATH="/Users/eric/kcov_build/kcov/src/Release:$PATH"
 
-# exa / ls aliases
-# requires exa (brew install exa)
+# exa / ls aliases (brew install exa)
 alias ls='exa'
 alias l='exa'
 alias lsn='ls -snew'
@@ -59,30 +72,14 @@ transfer() {
 }
 
 
-# general OS aliases
+# general aliases
 alias subl='/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl'
 alias copy="tr -d '\n' | pbcopy"
 alias cpwd="pwd | copy"
 alias py="python3"
 
-# Python
-alias avenv='source env/bin/activate'
-
 # Ruby
 eval "$(rbenv init -)"
-
-# temporary C++ alias
-function cprun () {
-    g++ -std=c++14 "$@" && ./a.out && rm a.out
-    return 0
-}
-
-function crun () {
-    clang "$@" && ./a.out
-    return 0
-}
-
-alias cling='/Users/eric/cling/cling-build/builddir/bin/cling'
 
 # git aliases
 alias g='git'
@@ -106,12 +103,12 @@ export GITAWAREPROMPT=~/.bash/git-aware-prompt
 source "${GITAWAREPROMPT}/main.sh"
 
 # requires fzf: https://github.com/junegunn/fzf
+# brings up results in a window with previewing
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 alias fzf='fzf --preview="cat {}" --preview-window=right:50%:wrap | tee >(copy)'
 
 # requires autojump: https://github.com/wting/autojump
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
-
 
 # added by travis gem
 [ -f /Users/eric/.travis/travis.sh ] && source /Users/eric/.travis/travis.sh
