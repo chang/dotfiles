@@ -16,9 +16,10 @@ set hlsearch incsearch                " highlight found characters
 set backspace=start,eol,indent        " allow backspacing past the INSERT
 set omnifunc=syntaxcomplete#Complete  " use omnicompletion
 
+
 " swap files get in the way
-" set swapfile
-" set dir=~/tmp
+set swapfile
+set dir=/Users/eric/.swapfiles  " create this directory if it doesn't exist
 
 " vertical split line formatting
 " :set fillchars+=vert:\
@@ -75,9 +76,8 @@ let g:multi_cursor_skip_key            = '<C-x>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
 "" Aesthetics
-Plug 'junegunn/goyo.vim'  " distraction free mode
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'junegunn/goyo.vim'        " distraction free mode
+Plug 'blueyed/vim-diminactive'  " dim inactive panes
 
 "" Themes
 Plug 'dracula/vim', { 'as': 'dracula' }
@@ -86,6 +86,9 @@ Plug 'drewtempelmeyer/palenight.vim'
 Plug 'arcticicestudio/nord-vim'
 Plug 'phanviet/vim-monokai-pro'
 Plug 'sickill/vim-monokai'
+
+Plug 'itchyny/lightline.vim'
+set laststatus=2
 
 "" Python
 " Plug 'davidhalter/jedi-vim'  " has issues with hanging on completion
@@ -102,6 +105,11 @@ Plug 'derekwyatt/vim-scala'
 " let g:LanguageClient_serverCommands = { 'haskell': ['hie', '--lsp'] }
 
 call plug#end()
+
+augroup myvimrc
+    au!
+    au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') | so $MYGVIMRC | endif
+augroup END
 
 colo monokai_pro
 " http://vimgolf.com/
