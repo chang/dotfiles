@@ -57,6 +57,9 @@ echo -e "\033]6;1;bg;green;brightness;42\a"
 echo -e "\033]6;1;bg;blue;brightness;54\a"
 DISABLE_AUTO_TITLE="true"
 
+# MacVim
+export PATH="/Applications/MacVim.app/Contents/bin:$PATH"
+
 # Haskell
 export PATH="/Users/eric/.local/bin:$PATH"  # Haskell language server is kept here
 export PATH="$HOME/Library/Haskell/bin:$PATH"  # cabal binaries here
