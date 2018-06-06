@@ -9,13 +9,39 @@ fi
 
 ## zsh hooks
 
+# Color
+# function contents via http://mywiki.wooledge.org/BashFAQ/037
+init_term_cmds() {
+    # only set if we're on an interactive session
+    [[ -t 2 ]] && {
+        reset=$(    tput sgr0   || tput me      ) # Reset cursor
+        bold=$(     tput bold   || tput md      ) # Start bold
+        default=$(  tput op                     )
+        back=$'\b'
+
+        [[ $TERM != *-m ]] && {
+            red=$(      tput setaf 1 || tput AF 1    )
+            green=$(    tput setaf 2 || tput AF 2    )
+            yellow=$(   tput setaf 3 || tput AF 3    )
+            blue=$(     tput setaf 4 || tput AF 4    )
+            magenta=$(  tput setaf 5 || tput AF 5    )
+            cyan=$(     tput setaf 6 || tput AF 6    )
+            white=$(    tput setaf 7 || tput AF 7    )
+        }
+    } 2>/dev/null ||:
+}
+
+init_term_cmds
+
 # run these functions after every cd
 chpwd_functions=("activate_virtualenv" "cd_ls")
 
 function activate_virtualenv() {  
     if [[ -d "env" ]] && [[ -e "env/bin/activate" ]]; then
-        # check if the virtualeenv is already active
-        echo "Activated virtualenv: $(dirs -c; dirs)/env"
+        # check if the virtualenv is already active
+        echo -n "$yellow"
+        echo "Activated virtualenv: $bold$(dirs -c; dirs)/env"
+        echo -n "$reset"
         source env/bin/activate
     fi
 }
@@ -30,6 +56,10 @@ echo -e "\033]6;1;bg;red;brightness;40\a"
 echo -e "\033]6;1;bg;green;brightness;42\a"
 echo -e "\033]6;1;bg;blue;brightness;54\a"
 DISABLE_AUTO_TITLE="true"
+
+# Haskell
+export PATH="/Users/eric/.local/bin:$PATH"  # Haskell language server is kept here
+export PATH="$HOME/Library/Haskell/bin:$PATH"  # cabal binaries here
 
 # Rust
 export PATH="/Users/eric/.cargo/bin:$PATH"

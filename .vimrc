@@ -1,5 +1,6 @@
 " basic syntax stuff
 syntax on
+set nowrap
 set tabstop=4
 set expandtab
 set shiftwidth=4
@@ -27,5 +28,6 @@ call plug#begin('~/.vim/plugged')
 Plug 'junegunn/goyo.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'ervandew/supertab'
+Plug 'davidhalter/jedi-vim'
 
 call plug#end()
