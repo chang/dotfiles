@@ -15,17 +15,35 @@ set termguicolors                     " truecolor
 set hlsearch incsearch                " highlight found characters
 set backspace=start,eol,indent        " allow backspacing past the INSERT
 set omnifunc=syntaxcomplete#Complete  " use omnicompletion
-map <SPACE> <leader>
+
+" swap files get in the way
+" set swapfile
+" set dir=~/tmp
+
+" vertical split line formatting
+" :set fillchars+=vert:\
+
+""" KEYMAPS
+nmap ; :
+
+" split navigation
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+set splitbelow  " split in same location as iterm
+set splitright
+
+" map <SPACE> <leader>
 
 """ PLUGINS
 call plug#begin('~/.vim/plugged')
 
 "" Navigation
-Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-commentary'  " easier than nerdcommenter (gc)
 
 Plug 'scrooloose/nerdtree'
-autocmd VimEnter * if !argc() | NERDTree | endif
-
+" autocmd VimEnter * if !argc() | NERDTree | endif
 
 Plug 'ajh17/VimCompletesMe'
 "Plug 'ervandew/supertab'
@@ -58,6 +76,8 @@ let g:multi_cursor_quit_key            = '<Esc>'
 
 "" Aesthetics
 Plug 'junegunn/goyo.vim'  " distraction free mode
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 "" Themes
 Plug 'dracula/vim', { 'as': 'dracula' }
@@ -73,7 +93,8 @@ Plug 'vim-python/python-syntax'
 let g:python_highlight_all = 1
 
 "" Scala
-" Plug 'ensime/ensime-vim'
+" Ensime has a 300ms+ load time
+Plug 'ensime/ensime-vim', { 'for': 'scala' }
 Plug 'derekwyatt/vim-scala'
 
 "" Haskell
