@@ -16,7 +16,6 @@ set hlsearch incsearch                " highlight found characters
 set backspace=start,eol,indent        " allow backspacing past the INSERT
 set omnifunc=syntaxcomplete#Complete  " use omnicompletion
 
-
 " swap files get in the way
 set swapfile
 set dir=/Users/eric/.swapfiles  " create this directory if it doesn't exist
@@ -26,6 +25,8 @@ set dir=/Users/eric/.swapfiles  " create this directory if it doesn't exist
 
 """ KEYMAPS
 nmap ; :
+" CAPS is remapped in Mac under Keyboard -> Modifier Keys
+" map <SPACE> <leader>
 
 " split navigation
 nnoremap <C-J> <C-W><C-J>
@@ -34,8 +35,6 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 set splitbelow  " split in same location as iterm
 set splitright
-
-" map <SPACE> <leader>
 
 """ PLUGINS
 call plug#begin('~/.vim/plugged')
@@ -46,7 +45,7 @@ Plug 'tpope/vim-commentary'  " easier than nerdcommenter (gc)
 Plug 'scrooloose/nerdtree'
 " autocmd VimEnter * if !argc() | NERDTree | endif
 
-Plug 'ajh17/VimCompletesMe'
+Plug 'ajh17/VimCompletesMe'  " easier than supertab
 "Plug 'ervandew/supertab'
 "" have supertab use omnicomplete by default with user complete as a fallback
 "let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
@@ -55,9 +54,6 @@ Plug 'ajh17/VimCompletesMe'
     "\   call SuperTabChain(&omnifunc, "<c-p>") |
     "\ endif
 
-Plug 'junegunn/vim-easy-align'
-xmap ea <Plug>(EasyAlign)
-
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'  " :Files Ag Buffers Commands
 
@@ -65,15 +61,14 @@ Plug 'junegunn/fzf.vim'  " :Files Ag Buffers Commands
 Plug 'tpope/vim-surround'
 
 Plug 'terryma/vim-multiple-cursors'
-let g:multi_cursor_use_default_mapping=0
-let g:multi_cursor_start_word_key      = '<C-n>'
-let g:multi_cursor_select_all_word_key = '<A-n>'
-let g:multi_cursor_start_key           = 'g<C-n>'
-let g:multi_cursor_select_all_key      = 'g<A-n>'
-let g:multi_cursor_next_key            = '<C-n>'
-let g:multi_cursor_prev_key            = '<C-p>'
-let g:multi_cursor_skip_key            = '<C-x>'
-let g:multi_cursor_quit_key            = '<Esc>'
+" let g:multi_cursor_start_word_key      = '<C-n>'
+" let g:multi_cursor_select_all_word_key = '<A-n>'
+" let g:multi_cursor_start_key           = 'g<C-n>'
+" let g:multi_cursor_select_all_key      = 'g<A-n>'
+" let g:multi_cursor_next_key            = '<C-n>'
+" let g:multi_cursor_prev_key            = '<C-p>'
+" let g:multi_cursor_skip_key            = '<C-x>'
+" let g:multi_cursor_quit_key            = '<Esc>'
 
 "" Aesthetics
 Plug 'junegunn/goyo.vim'        " distraction free mode
@@ -106,10 +101,9 @@ Plug 'derekwyatt/vim-scala'
 
 call plug#end()
 
-augroup myvimrc
-    au!
-    au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') | so $MYGVIMRC | endif
-augroup END
+" automatically reload vimrc while editing vimrc
+let vimrc_path = "/Users/eric/.vimrc"
+autocmd BufWritePost vimrc_path so vimrc_path
 
-colo monokai_pro
+colo palenight
 " http://vimgolf.com/
