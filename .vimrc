@@ -25,6 +25,9 @@ set dir=/Users/eric/.swapfiles  " create this directory if it doesn't exist
 
 """ KEYMAPS
 nmap ; :
+nmap 4 0
+" inoremap kj <Esc>
+
 " CAPS is remapped in Mac under Keyboard -> Modifier Keys
 " map <SPACE> <leader>
 
@@ -39,37 +42,21 @@ set splitright
 """ PLUGINS
 call plug#begin('~/.vim/plugged')
 
+Plug 'tpope/vim-sensible/'
+
 "" Navigation
-Plug 'tpope/vim-commentary'  " easier than nerdcommenter (gc)
-
+Plug 'tpope/vim-commentary'           " easier than nerdcommenter (gc)
 Plug 'scrooloose/nerdtree'
-" autocmd VimEnter * if !argc() | NERDTree | endif
-
-Plug 'ajh17/VimCompletesMe'  " easier than supertab
-"Plug 'ervandew/supertab'
-"" have supertab use omnicomplete by default with user complete as a fallback
-"let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
-"autocmd FileType *
-    "\ if &omnifunc != '' |
-    "\   call SuperTabChain(&omnifunc, "<c-p>") |
-    "\ endif
-
+Plug 'ajh17/VimCompletesMe'           " easier than supertab
 Plug '/usr/local/opt/fzf'
-Plug 'junegunn/fzf.vim'  " :Files Ag Buffers Commands
-
-" ds_, cs_, ys(obj)_
-Plug 'tpope/vim-surround'
-
+Plug 'junegunn/fzf.vim'               " :Files Ag Buffers Commands
+Plug 'tpope/vim-surround'             " :s_, cs_, ys(obj)_
 Plug 'terryma/vim-multiple-cursors'
-" let g:multi_cursor_start_word_key      = '<C-n>'
-" let g:multi_cursor_select_all_word_key = '<A-n>'
-" let g:multi_cursor_start_key           = 'g<C-n>'
-" let g:multi_cursor_select_all_key      = 'g<A-n>'
-" let g:multi_cursor_next_key            = '<C-n>'
-" let g:multi_cursor_prev_key            = '<C-p>'
-" let g:multi_cursor_skip_key            = '<C-x>'
-" let g:multi_cursor_quit_key            = '<Esc>'
-
+Plug 'brooth/far.vim'                 " find and replace
+Plug 'jiangmiao/auto-pairs'
+Plug 'tommcdo/vim-lion'               " gl{} and gL{} to align on a character
+Plug 'AndrewRadev/splitjoin.vim'      " gS and gJ to split and join lines
+ 
 "" Aesthetics
 Plug 'junegunn/goyo.vim'        " distraction free mode
 Plug 'blueyed/vim-diminactive'  " dim inactive panes
@@ -85,25 +72,27 @@ Plug 'sickill/vim-monokai'
 Plug 'itchyny/lightline.vim'
 set laststatus=2
 
+"" Languages
+Plug 'sheerun/vim-polyglot'
+Plug 'vim-syntastic/syntastic'
+let g:syntastic_mode_map = {
+    \ "mode": "active",
+    \ "passive_filetypes": ["scala"] }
+
 "" Python
 " Plug 'davidhalter/jedi-vim'  " has issues with hanging on completion
-Plug 'vim-python/python-syntax'
 let g:python_highlight_all = 1
 
 "" Scala
 " Ensime has a 300ms+ load time
 Plug 'ensime/ensime-vim', { 'for': 'scala' }
-Plug 'derekwyatt/vim-scala'
 
 "" Haskell
-" Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' }
-" let g:LanguageClient_serverCommands = { 'haskell': ['hie', '--lsp'] }
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' }
+let g:LanguageClient_serverCommands = { 'haskell': ['hie', '--lsp'] }
 
 call plug#end()
 
-" automatically reload vimrc while editing vimrc
-let vimrc_path = "/Users/eric/.vimrc"
-autocmd BufWritePost vimrc_path so vimrc_path
 
 colo palenight
 " http://vimgolf.com/
