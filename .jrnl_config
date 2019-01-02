@@ -1,0 +1,18 @@
+{
+  "journals": {
+    "default": {
+      "journal": "/Users/eric/Dropbox/Sync/journal.txt",
+      "encrypt": false
+    }
+  },
+  "editor": "vim -c 'set wrap linebreak'",
+  "encrypt": false,
+  "default_hour": 0,
+  "default_minute": 0,
+  "timeformat": "%Y-%m-%d %H:%M",
+  "tagsymbols": "@",
+  "highlight": true,
+  "linewrap": 100,
+  "prettytimeformat": "%A, %b %d %Y",
+  "entry_separator": "\n\n"
+}
