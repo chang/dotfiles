@@ -81,22 +81,6 @@ activate_virtualenv() {
     fi
 }
 
-# Automatically activate and switch node versions.
-#
-# If a .nvmrc exists in the current directory and doesn't match the current version,
-# switch with `nvm use`.
-activate_nvmrc() {
-    current_node_version="$(node --version | tr -d '\n')"
-    if [[ -e ".nvmrc" ]]; then
-        nvmrc_node_version="$(cat .nvmrc | tr -d '\n')"
-        if [[ "$current_node_version" != "$nvmrc_node_version" ]]; then
-            autocmd_notification "Switching nvm version: $nvmrc_node_version"
-            nvm use < .nvmrc
-        fi
-    fi
-}
-
-
 # Alias for ls.
 #
 # For some reason `ls` doesn't work as a zsh hook on its own.
@@ -110,7 +94,6 @@ setup_zsh_hooks() {
      # Run after every directory change.
     chpwd_functions=(
         "activate_virtualenv"
-        "activate_nvmrc"
         "cd_ls"
     )
 }
@@ -132,16 +115,24 @@ setup_iterm2_menubar() {
 # Required:
 #   - exa (https://github.com/ogham/exa): brew install exa
 aliases_general() {
+    # Navigation
     alias ls='exa'
     alias l='exa'
     alias lsn='ls -snew'
+    alias tree='ls -T'
+    alias hg='history -1000 | ag'  # TODO: be smarter about getting the line count
 
+    # Clipboard
     alias copy="tr -d '\n' | pbcopy"
     alias cpwd="pwd | copy"
+
+    # Editing
+    # alias v="vim"
 
     alias vimrc="modify_and_source_rcfile ~/.vimrc"
     alias zshrc="modify_and_source_rcfile ~/.zshrc"
 
+    # Languages
     alias py="python3"
 }
 
@@ -150,7 +141,7 @@ aliases_general() {
 #
 # Args:
 #   - $1: Path to the file to be modified.
-modify_and_source_rcfile() {
+function modify_and_source_rcfile() {
     local file_path="$1"
     vim $file_path
     autocmd_notification "Sourcing: $file_path"
@@ -185,6 +176,7 @@ aliases_git() {
     alias gd='git diff'
     alias gds='git diff --staged'
     alias gl='git log'
+    alias gp='git push'
 }
 
 
@@ -194,16 +186,21 @@ aliases_git() {
 #   - fzf (https://github.com/junegunn/fzf)
 setup_fzf() {
     [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-    alias fzf='fzf --preview="cat {}" --preview-window=right:50%:wrap | tee >(copy)'
+    alias fzf='fzf --preview="if [ -d {} ]; then; exa {}; else; ccat {}; fi" --preview-window=right:50%:wrap | tee >(copy)'
+
+    # fd is much faster and respects .gitignore
+    export FZF_DEFAULT_COMMAND='fd --type f'
 }
 
 
-# Setup autojump.
-#
-# Requires:
-#   - autojump (https://github.com/wting/autojump)
-setup_autojump() {
-    [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+# If the input is a directory, cd to it. If it's anything else, copy it to the clipboard.
+preview_fzf_match() {
+    local fzf_match="$1"
+    if [ -d $fzf_match ]; then
+        exa $fzf_match
+    else
+        ccat $fzf_match
+    fi
 }
 
 
@@ -242,6 +239,13 @@ clippy() {
 }
 
 
+# https://github.com/clvv/fasd
+setup_fasd() {
+    eval "$(fasd --init auto)"
+    alias j="fasd_cd -d"
+}
+
+
 main() {
     setup_prezto
     setup_path_modifications
@@ -253,7 +257,17 @@ main() {
     setup_zsh_hooks
     setup_iterm2_menubar
     setup_fzf
-    setup_autojump
+    setup_fasd
+
+    if [ -f ~/.zshrc-asana ]; then
+        source ~/.zshrc-asana
+        source ~/.profile
+    else;
+        echo "no .zshrc-asana found. remove these lines."
+    fi
+
 }
 
+
 main
+

@@ -10,22 +10,28 @@ set softtabstop=4
 set smartindent
 set showcmd
 set formatoptions-=ro                 " don't auto insert comment characters
-set t_Co=256                          " 256 color
+" set t_Co=256                          " 256 color
 set termguicolors                     " truecolor
 set hlsearch incsearch                " highlight found characters
 set backspace=start,eol,indent        " allow backspacing past the INSERT
 set omnifunc=syntaxcomplete#Complete  " use omnicompletion
+set ignorecase                        " case insensitive search
+set relativenumber
 
 " swap files get in the way
 set swapfile
-set dir=/Users/eric/.swapfiles  " create this directory if it doesn't exist
+set dir=~/.swapfiles  " create this directory if it doesn't exist
+
+" copy and paste from the system terminal and across vim instances
+" :echo has('clipboard') must return 1 for this to work
+" set clipboard=unnamedplus
 
 " vertical split line formatting
 " :set fillchars+=vert:\
 
 """ KEYMAPS
-nmap ; :
-nmap 4 0
+" ugh I like this but then I can't use ; to repeat motions...
+" nmap ; :
 " inoremap kj <Esc>
 
 " CAPS is remapped in Mac under Keyboard -> Modifier Keys
@@ -70,14 +76,18 @@ Plug 'phanviet/vim-monokai-pro'
 Plug 'sickill/vim-monokai'
 
 Plug 'itchyny/lightline.vim'
+
+"" Fun
+Plug 'mattn/vim-starwars'
+
 set laststatus=2
 
 "" Languages
 Plug 'sheerun/vim-polyglot'
-Plug 'vim-syntastic/syntastic'
-let g:syntastic_mode_map = {
-    \ "mode": "active",
-    \ "passive_filetypes": ["scala"] }
+" Plug 'vim-syntastic/syntastic'
+" let g:syntastic_mode_map = {
+"     \ "mode": "active",
+"     \ "passive_filetypes": ["scala"] }
 
 "" Python
 " Plug 'davidhalter/jedi-vim'  " has issues with hanging on completion
@@ -85,14 +95,17 @@ let g:python_highlight_all = 1
 
 "" Scala
 " Ensime has a 300ms+ load time
-Plug 'ensime/ensime-vim', { 'for': 'scala' }
+" Plug 'ensime/ensime-vim', { 'for': 'scala' }
 
 "" Haskell
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' }
-let g:LanguageClient_serverCommands = { 'haskell': ['hie', '--lsp'] }
+" Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' }
+" let g:LanguageClient_serverCommands = { 'haskell': ['hie', '--lsp'] }
 
 call plug#end()
 
+"" Markdown
+autocmd Filetype markdown setlocal wrap linebreak
 
-colo palenight
+
 " http://vimgolf.com/
+colo palenight
