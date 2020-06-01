@@ -16,7 +16,10 @@ set hlsearch incsearch                " highlight found characters
 set backspace=start,eol,indent        " allow backspacing past the INSERT
 set omnifunc=syntaxcomplete#Complete  " use omnicompletion
 set ignorecase                        " case insensitive search
+
+" hybrid line numbers
 set relativenumber
+set number
 
 " swap files get in the way
 set swapfile
@@ -67,7 +70,7 @@ noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR>
  
 "" Aesthetics
 Plug 'junegunn/goyo.vim'        " distraction free mode
-Plug 'blueyed/vim-diminactive'  " dim inactive panes
+" Plug 'blueyed/vim-diminactive'  " dim inactive panes
 Plug 'junegunn/limelight.vim'
 
 "" Themes

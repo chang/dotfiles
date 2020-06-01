@@ -1,0 +1,63 @@
+ASANA2="/Users/ericchang/sandbox/asana/asana2"
+
+
+# for some weird reason this function runs when the rcfile is sourced multiple times?
+# run-examples-app() {
+#     cd $ASANA2
+#     tools/dev/start_server.py --target //luna-ui:examples_app
+# }
+
+# Copy the full path to a file, given its relative path from the current directory.
+cfullpath() {
+    local relative_path="$1"
+    local full_path="$(pwd)/$relative_path"
+    echo $full_path | pbcopy
+    echo $full_path
+}
+
+
+asana_aliases() {
+    alias gp="git pr"
+
+    # ssh
+    alias s8="r p@s8"
+    alias pp="r p@p"
+    alias pr="r b@p-r"
+    alias ds="r o@beta-datascripts"
+
+    alias dud="du -h --max-depth=1 | sort -hr"
+}
+
+
+asana_link_aliases() {
+    alias op="open https://github.com/Asana/codez/pulls/chang"
+    alias opc="open 'https://github.com/Asana/codez/pulls?q=is%3Apr+author%3Achang+is%3Aclosed'"
+    alias oa="open https://app.asana.com/"
+    alias oc="open https://github.com/Asana/codez"
+    alias gdm="git diff ericchang-master"
+}
+
+
+discworld() {
+    local tinfile="/tmp/run.tin"
+    echo "#session dm discworld.starturtle.net 23" > $tinfile
+    echo "mudpies" >> $tinfile
+    echo "echang" >> $tinfile
+    tt++ /tmp/run.tin
+}
+
+
+setup_z() {
+    source /Users/ericchang/Documents/z/z.sh
+}
+
+
+main() {
+    asana_aliases
+    asana_link_aliases
+    setup_z
+}
+
+
+main
+

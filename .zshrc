@@ -1,3 +1,4 @@
+zmodload zsh/zprof
 # Following this style guide: https://github.com/progrium/bashstyle
 #
 # Profiling .zshrc:
@@ -28,6 +29,11 @@ setup_path_modifications() {
 
     # Python
     # export PATH="/usr/local/Cellar/python/3.6.4/bin:$PATH"  # Homebrew broke Python
+}
+
+
+setup_silent_login() {
+    touch ~/.hushlogin
 }
 
 
@@ -81,22 +87,6 @@ activate_virtualenv() {
     fi
 }
 
-# Automatically activate and switch node versions.
-#
-# If a .nvmrc exists in the current directory and doesn't match the current version,
-# switch with `nvm use`.
-activate_nvmrc() {
-    current_node_version="$(node --version | tr -d '\n')"
-    if [[ -e ".nvmrc" ]]; then
-        nvmrc_node_version="$(cat .nvmrc | tr -d '\n')"
-        if [[ "$current_node_version" != "$nvmrc_node_version" ]]; then
-            autocmd_notification "Switching nvm version: $nvmrc_node_version"
-            nvm use < .nvmrc
-        fi
-    fi
-}
-
-
 # Alias for ls.
 #
 # For some reason `ls` doesn't work as a zsh hook on its own.
@@ -109,8 +99,7 @@ cd_ls() {
 setup_zsh_hooks() {
      # Run after every directory change.
     chpwd_functions=(
-        "activate_virtualenv"
-        "activate_nvmrc"
+        # "activate_virtualenv"
         "cd_ls"
     )
 }
@@ -119,12 +108,12 @@ setup_zsh_hooks() {
 # Set iTerm2 menubar color.
 #
 # For the Snazzy theme.
-setup_iterm2_menubar() {
-    echo -n -e "\033]6;1;bg;red;brightness;40\a"
-    echo -n -e "\033]6;1;bg;green;brightness;42\a"
-    echo -n -e "\033]6;1;bg;blue;brightness;54\a"
-    export DISABLE_AUTO_TITLE="true"
-}
+# setup_iterm2_menubar() {
+#     echo -n -e "\033]6;1;bg;red;brightness;40\a"
+#     echo -n -e "\033]6;1;bg;green;brightness;42\a"
+#     echo -n -e "\033]6;1;bg;blue;brightness;54\a"
+#     export DISABLE_AUTO_TITLE="true"
+# }
 
 
 # General aliases for navigation.
@@ -132,17 +121,30 @@ setup_iterm2_menubar() {
 # Required:
 #   - exa (https://github.com/ogham/exa): brew install exa
 aliases_general() {
+    # Navigation
     alias ls='exa'
     alias l='exa'
     alias lsn='ls -snew'
+    alias tree='ls -T'
+    alias hg='history -1000 | ag'  # TODO: be smarter about getting the line count
 
+    # Clipboard
     alias copy="tr -d '\n' | pbcopy"
     alias cpwd="pwd | copy"
+
+    # Editing
+    # alias v="vim"
+    alias cat="bat"
 
     alias vimrc="modify_and_source_rcfile ~/.vimrc"
     alias zshrc="modify_and_source_rcfile ~/.zshrc"
 
+    # Languages
     alias py="python3"
+    alias delete-images="docker image list | 'fzf' -m | awk '{print $3}' | xargs docker image rm --force"
+
+    # Docker
+    alias drun="docker run -it --entrypoint /bin/bash"
 }
 
 
@@ -150,7 +152,7 @@ aliases_general() {
 #
 # Args:
 #   - $1: Path to the file to be modified.
-modify_and_source_rcfile() {
+function modify_and_source_rcfile() {
     local file_path="$1"
     vim $file_path
     autocmd_notification "Sourcing: $file_path"
@@ -178,6 +180,7 @@ hdi() {
 # Git aliases.
 aliases_git() {
     alias ga='git add'
+    alias gah='git add .'
     alias gc='git commit'
     alias gs='git status'
     alias gb='git branch'
@@ -185,6 +188,10 @@ aliases_git() {
     alias gd='git diff'
     alias gds='git diff --staged'
     alias gl='git log'
+    alias gp='git push'
+    alias gchh="git checkout HEAD -- ."
+
+    alias delete-branches="git branch | 'fzf' -m | xargs git branch -D"
 }
 
 
@@ -194,16 +201,34 @@ aliases_git() {
 #   - fzf (https://github.com/junegunn/fzf)
 setup_fzf() {
     [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-    alias fzf='fzf --preview="cat {}" --preview-window=right:50%:wrap | tee >(copy)'
+    alias fzf='fzf --preview="if [ -d {} ]; then; exa {}; else; bat --color=always {}; fi" --preview-window=right:50%:wrap | tee >(copy)'
+
+    # fd is much faster and respects .gitignore
+    export FZF_DEFAULT_COMMAND='fd --type f'
 }
 
 
-# Setup autojump.
-#
-# Requires:
-#   - autojump (https://github.com/wting/autojump)
-setup_autojump() {
-    [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+fzfa() {
+    python -c "import os; print '\$CODEZ/{}'.format(os.path.relpath(os.path.abspath('$(fzf)'), '$CODEZ'))" | tee >(copy)
+}
+
+# Use fd (https://github.com/sharkdp/fd) instead of the default find
+# command for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+_fzf_compgen_path() {
+    fd --hidden --follow --exclude ".git" . "$1"
+}
+
+
+# If the input is a directory, cd to it. If it's anything else, copy it to the clipboard.
+preview_fzf_match() {
+    local fzf_match="$1"
+    if [ -d $fzf_match ]; then
+        exa $fzf_match
+    else
+        bat $fzf_match
+    fi
 }
 
 
@@ -242,18 +267,66 @@ clippy() {
 }
 
 
+discworld() {
+    local tinfile="/tmp/run.tin"
+    echo "#session dm discworld.starturtle.net 23" > $tinfile
+    echo "mudpies" >> $tinfile
+    echo "echang" >> $tinfile
+    tt++ /tmp/run.tin
+}
+
+
+# https://github.com/clvv/fasd
+setup_z() {
+    alias j="z"
+}
+
+
+jflip() {
+    local directory=$PWD
+
+    if [[ $directory == *main* ]]; then
+        local test_dir="${directory/main/test}"
+        cd $test_dir
+    elif [[ $directory == *"test"* ]]; then
+        local main_dir="${directory/test/main}"
+        cd $main_dir
+    else
+        echo "Not in a Java package directory."
+    fi
+}
+
+
+use_async_suggestions() {
+    # https://github.com/zsh-users/zsh-autosuggestions/issues/234
+    export ZSH_AUTOSUGGEST_USE_ASYNC=1
+}
+
+
 main() {
     setup_prezto
     setup_path_modifications
-    add_term_colors
+    # add_term_colors
+    use_async_suggestions
 
     aliases_git
     aliases_general
 
     setup_zsh_hooks
-    setup_iterm2_menubar
+    # setup_iterm2_menubar
+    setup_silent_login
     setup_fzf
-    setup_autojump
+    setup_z
+
+    if [ -f ~/.zshrc-asana ]; then
+        source ~/.zshrc-asana
+        source ~/.profile
+    else;
+        echo "no .zshrc-asana found. remove these lines."
+    fi
+
 }
 
+
 main
+

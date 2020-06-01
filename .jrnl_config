@@ -1,7 +1,7 @@
 {
   "journals": {
     "default": {
-      "journal": "$HOME/Dropbox/Sync/journal.txt",
+      "journal": "/Users/ericchang/Dropbox/Sync/journal.txt",
       "encrypt": false
     }
   },
