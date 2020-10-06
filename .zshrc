@@ -131,6 +131,7 @@ aliases_general() {
     # Clipboard
     alias copy="tr -d '\n' | pbcopy"
     alias cpwd="pwd | copy"
+    alias cb="git rev-parse --abbrev-ref HEAD | copy"
 
     # Editing
     # alias v="vim"

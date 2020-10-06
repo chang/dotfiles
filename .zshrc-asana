@@ -18,14 +18,15 @@ cfullpath() {
 
 asana_aliases() {
     alias gp="git pr"
+    alias dud="du -h --max-depth=1 | sort -hr"
+}
 
-    # ssh
+
+asana_ssh_aliases() {
     alias s8="r p@s8"
     alias pp="r p@p"
-    alias pr="r b@p-r"
     alias ds="r o@beta-datascripts"
-
-    alias dud="du -h --max-depth=1 | sort -hr"
+    alias pkc="r p@prod-kc"
 }
 
 
@@ -55,6 +56,7 @@ setup_z() {
 main() {
     asana_aliases
     asana_link_aliases
+    asana_ssh_aliases
     setup_z
 }
 
