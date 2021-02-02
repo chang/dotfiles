@@ -17,7 +17,7 @@ cfullpath() {
 
 
 asana_aliases() {
-    alias gp="git pr"
+    alias gp="git pull --no-tags"
     alias dud="du -h --max-depth=1 | sort -hr"
 }
 

@@ -181,16 +181,16 @@ hdi() {
 # Git aliases.
 aliases_git() {
     alias ga='git add'
-    alias gah='git add .'
     alias gc='git commit'
     alias gs='git status'
     alias gb='git branch'
     alias gch='git checkout'
     alias gd='git diff'
-    alias gds='git diff --staged'
     alias gl='git log'
     alias gp='git push'
-    alias gchh="git checkout HEAD -- ."
+
+    alias gf='git fetch --no-tags'
+    alias gds='git diff --staged'
 
     alias delete-branches="git branch | 'fzf' -m | xargs git branch -D"
 }
@@ -202,7 +202,7 @@ aliases_git() {
 #   - fzf (https://github.com/junegunn/fzf)
 setup_fzf() {
     [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-    alias fzf='fzf --preview="if [ -d {} ]; then; exa {}; else; bat --color=always {}; fi" --preview-window=right:50%:wrap | tee >(copy)'
+    alias fzf='fzf --preview="if [ -d {} ]; then; exa {}; else; bat --color=always {}; fi" --preview-window=right:80%:wrap | tee >(copy)'
 
     # fd is much faster and respects .gitignore
     export FZF_DEFAULT_COMMAND='fd --type f'
